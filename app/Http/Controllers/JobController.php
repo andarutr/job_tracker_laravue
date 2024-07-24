@@ -35,8 +35,8 @@ class JobController extends Controller
         return response()->json($data);
     }
 
-    public function getDatatableApplied(){
-        $data = DB::table('applications')->get();
+    public function getDataApplied(){
+        $data['apply'] = DB::table('applications')->get();
         
         return response()->json($data);
     }

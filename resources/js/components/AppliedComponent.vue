@@ -5,7 +5,7 @@
                 {{ title }}
             </h2>
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
-                <a href="javascript:;" class="btn btn-primary shadow-md mr-2"><router-link to="/applied/create">Tambah Data</router-link></a>
+                <router-link to="/applied/create" class="btn btn-primary shadow-md mr-2">Tambah Data</router-link>
             </div>
         </div>
         <div class="col-span-12 mt-8">
@@ -69,6 +69,7 @@
                         <table class="table table-striped mt-5">
                             <thead>
                                 <tr>
+                                    <th class="whitespace-nowrap">No</th>
                                     <th class="whitespace-nowrap">Perusahaan</th>
                                     <th class="whitespace-nowrap">Role</th>
                                     <th class="whitespace-nowrap">Platform</th>
@@ -78,32 +79,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- @foreach($applications as $ap)
-                                <tr>
-                                    <td>{{ $ap->company }}</td>
-                                    <td>{{ $ap->role }}</td>
-                                    <td>{{ $ap->platform }}</td>
+                                <tr v-for="(ap, index) in applications" :key="index">
+                                    <td>{{ index+1 }}</td>
+                                    <td>{{ ap.company }}</td>
+                                    <td>{{ ap.role }}</td>
+                                    <td>{{ ap.platform }}</td>
                                     <td>
-                                        @if($ap->status === 'Send CV')
-                                        <span class="btn btn-sm btn-primary">{{ $ap->status }}</span>
-                                        @elseif($ap->status === 'Viewed')
-                                        <span class="btn btn-sm btn-dark">{{ $ap->status }}</span>
-                                        @elseif($ap->status === 'Interview HRD' OR $ap->status === 'Interview User')
-                                        <span class="btn btn-sm btn-warning">{{ $ap->status }}</span>
-                                        @elseif($ap->status === 'Failed')
-                                        <span class="btn btn-sm btn-danger">{{ $ap->status }}</span>
-                                        @else
-                                        <span class="btn btn-sm btn-success">{{ $ap->status }}</span>
-                                        @endif
+                                        <span >{{ ap.status }}</span>
                                     </td>
-                                    <td>{{ \Carbon\Carbon::parse($ap->apply_at)->format('d F Y') }}</td>
+                                    <td>{{ moment(ap.apply_at).format('DD MMMM YYYY') }}</td>
                                     <td>
-                                        <a href="/user/applied/show/{{ $ap->id }}" class="btn btn-sm btn-primary"><i class="bi-eye"></i></a>
-                                        <a href="/user/applied/edit/{{ $ap->id }}" class="btn btn-sm btn-success text-white"><i class="bi-pencil-fill"></i></a>
-                                        <button wire:click="destroy('{{ $ap->id }}')" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus data?')"><i class="bi-trash"></i></button>
+                                        <button class="btn btn-primary btn-sm text-white"><i class="bi bi-eye-fill"></i></button>&nbsp;
+                                        <button class="btn btn-success btn-sm text-white"><i class="bi bi-pencil-fill"></i></button>&nbsp;
+                                        <button class="btn btn-danger btn-sm text-white"><i class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
-                                @endforeach -->
                             </tbody>
                         </table>
                     </div>
@@ -116,6 +106,7 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
     data(){
@@ -127,10 +118,12 @@ export default {
             indeed: 0, 
             pintarnya: 0, 
             ekrut: 0,
+            applications: []
         };
     },
     created(){
-        this.countDataCard();
+        this.countDataCard()
+        this.fetchApplications()
     },
     methods: {
         countDataCard(){
@@ -146,6 +139,19 @@ export default {
                     console.log("ada error nih!", err);
                 });
                     
+        },
+        fetchApplications() {
+            axios.get("/api/getDataApplied")
+                .then(res => {
+                    this.applications = res.data.apply;
+                }).catch(err => {
+                    console.log("ada error nih!", err);
+                });
+        }
+    },
+    computed: {
+        moment() {
+        return moment; 
         }
     }
 }
