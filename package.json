@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "moment": "^2.30.1",
+        "sweetalert2": "^11.12.3",
         "vue-datatables-net": "^2.0.1",
         "vue-router": "^4.4.0"
     }
