@@ -16,6 +16,7 @@
         "vue": "^3.2.37"
     },
     "dependencies": {
+        "vue-datatables-net": "^2.0.1",
         "vue-router": "^4.4.0"
     }
 }

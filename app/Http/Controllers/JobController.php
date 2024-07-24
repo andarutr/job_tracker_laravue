@@ -21,4 +21,23 @@ class JobController extends Controller
 
         return response()->json($data);
     }
+
+    public function getDataCountApplied(){
+        $data = [
+            'linkedin' => DB::table('applications')->where('platform', 'Linkedin')->count(),
+            'glints' => DB::table('applications')->where('platform', 'Glints')->count(),
+            'jobstreet' => DB::table('applications')->where('platform', 'Job Street')->count(),
+            'indeed' => DB::table('applications')->where('platform', 'Indeed')->count(),
+            'pintarnya' => DB::table('applications')->where('platform', 'Pintarnya')->count(),
+            'ekrut' => DB::table('applications')->where('platform', 'E-Krut')->count(),
+        ];
+
+        return response()->json($data);
+    }
+
+    public function getDatatableApplied(){
+        $data = DB::table('applications')->get();
+        
+        return response()->json($data);
+    }
 }

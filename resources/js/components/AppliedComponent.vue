@@ -2,7 +2,7 @@
     <div class="content">
         <div class="intro-y flex flex-col sm:flex-row items-center mt-8">
             <h2 class="text-lg font-medium mr-auto">
-                var_title
+                {{ title }}
             </h2>
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                 <a href="javascript:;" class="btn btn-primary shadow-md mr-2"><router-link to="/applied/create">Tambah Data</router-link></a>
@@ -13,7 +13,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_linkedin</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ linkedin }}</div>
                             <div class="text-base text-slate-500 mt-1">LINKEDIN</div>
                         </div>
                     </div>
@@ -21,7 +21,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_glints</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ glints }}</div>
                             <div class="text-base text-slate-500 mt-1">GLINTS</div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_jobstreet</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ jobstreet }}</div>
                             <div class="text-base text-slate-500 mt-1">JOBSTREET</div>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_indeed</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ indeed }}</div>
                             <div class="text-base text-slate-500 mt-1">INDEED</div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_pintarnya</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ pintarnya }}</div>
                             <div class="text-base text-slate-500 mt-1">PINTARNYA</div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                 <div class="col-span-12 sm:col-span-6 xl:col-span-2 intro-y">
                     <div class="report-box zoom-in">
                         <div class="box p-5 text-center">
-                            <div class="text-3xl font-medium leading-8 mt-6">var_ekrut</div>
+                            <div class="text-3xl font-medium leading-8 mt-6">{{ ekrut }}</div>
                             <div class="text-base text-slate-500 mt-1">E-KRUT</div>
                         </div>
                     </div>
@@ -113,3 +113,40 @@
         <!-- <div class="mt-5 ml-5 mb-5">{{ $applications->links() }}</div><br> -->
     </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+    data(){
+        return {
+            title: "List Lamaran Kamu",
+            linkedin: 0, 
+            glints: 0, 
+            jobstreet: 0, 
+            indeed: 0, 
+            pintarnya: 0, 
+            ekrut: 0,
+        };
+    },
+    created(){
+        this.countDataCard();
+    },
+    methods: {
+        countDataCard(){
+            axios.get("/api/getDataCountApplied")
+                .then(res => {
+                    this.linkedin = res.data.linkedin;
+                    this.glints = res.data.glints;
+                    this.jobstreet = res.data.jobstreet;
+                    this.indeed = res.data.indeed;
+                    this.pintarnya = res.data.pintarnya;
+                    this.ekrut = res.data.ekrut;
+                }).catch(err => {
+                    console.log("ada error nih!", err);
+                });
+                    
+        }
+    }
+}
+</script>
