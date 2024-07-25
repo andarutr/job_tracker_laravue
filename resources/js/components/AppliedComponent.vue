@@ -65,7 +65,7 @@
             <div class="p-5" id="basic-table">
                 <div class="preview">
                     <div class="overflow-x-auto">
-                        <input type="text" wire:model.live="search" placeholder="Cari data...">
+                        <input type="text" v-model="search" placeholder="Cari data...">
                         <table class="table table-striped mt-5">
                             <thead>
                                 <tr>
@@ -79,7 +79,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(ap, index) in applications" :key="index">
+                                <tr v-for="(ap, index) in applications.filter(ap => 
+        (ap.company && ap.company.toLowerCase().includes(search.toLowerCase())) ||
+        (ap.role && ap.role.toLowerCase().includes(search.toLowerCase())) ||
+        (ap.platform && ap.platform.toLowerCase().includes(search.toLowerCase())) ||
+        (ap.status && ap.status.toLowerCase().includes(search.toLowerCase())))" :key="index">
                                     <td>{{ index+1 }}</td>
                                     <td>{{ ap.company }}</td>
                                     <td>{{ ap.role }}</td>
@@ -119,7 +123,8 @@ export default {
             indeed: 0, 
             pintarnya: 0, 
             ekrut: 0,
-            applications: []
+            applications: [],
+            search: ''
         };
     },
     created(){
