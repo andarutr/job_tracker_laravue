@@ -82,4 +82,10 @@ class JobController extends Controller
             ]);
         }
     }
+
+    public function remove(Request $req){
+        DB::table('applications')->where('id', $req->id)->delete();
+        
+        return response()->json(['message' => 'Berhasil menghapus data!']);
+    }
 }

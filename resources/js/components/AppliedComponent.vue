@@ -91,7 +91,7 @@
                                     <td>
                                         <button class="btn btn-primary btn-sm text-white"><i class="bi bi-eye-fill"></i></button>&nbsp;
                                         <button class="btn btn-success btn-sm text-white"><i class="bi bi-pencil-fill"></i></button>&nbsp;
-                                        <button class="btn btn-danger btn-sm text-white"><i class="bi bi-trash-fill"></i></button>
+                                        <button class="btn btn-danger btn-sm text-white" @click="deleteApplication(ap.id)"><i class="bi bi-trash-fill"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -107,6 +107,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import Swal from 'sweetalert2';
 
 export default {
     data(){
@@ -147,6 +148,38 @@ export default {
                 }).catch(err => {
                     console.log("ada error nih!", err);
                 });
+        },
+        deleteApplication(id) {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: "Yakin ingin menghapus data?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/remove`, { 
+                        data: {id: id }
+                    })
+                        .then(res => {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                icon: 'success',
+                                text: res.message
+                            });
+
+                            this.fetchApplications(); 
+                        }).catch(err => {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Wah parah nih ada masalah!',
+                                icon: 'error'
+                            });
+                        });
+                }
+            });
         }
     },
     computed: {
