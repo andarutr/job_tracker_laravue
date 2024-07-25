@@ -89,6 +89,48 @@ class JobController extends Controller
         }
     }
 
+    public function update(Request $req){
+        $validator = Validator::make($req->all(), [
+            'company' => 'required',
+            'role' => 'required',
+            'platform' => 'required',
+            'apply_at' => 'required',
+            'status' => 'required',
+            'link' => 'required',
+            'description' => 'required',
+        ],[
+            'company.required' => 'Perusahaan harus diisi!',
+            'role.required' => 'Role harus diisi!',
+            'platform.required' => 'Platform harus diisi!',
+            'apply_at.required' => 'Apply at harus diisi!',
+            'status.required' => 'Status harus diisi!',
+            'link.required' => 'Link harus diisi!',
+            'description.required' => 'Deskripsi harus diisi!',
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }else{
+            DB::table('applications')
+                ->where('id', $req->id)
+                ->update([
+                    'company' => $req->company,
+                    'role' => $req->role,
+                    'platform' => $req->platform,
+                    'apply_at' => $req->apply_at,
+                    'status' => $req->status,
+                    'link' => $req->link,
+                    'description' => $req->description, 
+                ]);
+
+            return response()->json([
+                'message' => 'Berhasil memperbarui data!'
+            ]);
+        }
+    }
+
     public function remove(Request $req){
         DB::table('applications')->where('id', $req->id)->delete();
 

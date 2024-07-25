@@ -24,4 +24,5 @@ Route::get('/getDataFirst', [JobController::class, 'getDataFirst']);
 Route::get('/getDataCountApplied', [JobController::class, 'getDataCountApplied']);
 Route::get('/getDataApplied', [JobController::class, 'getDataApplied']);
 Route::post('/store', [JobController::class, 'store']);
+Route::put('/update', [JobController::class, 'update']);
 Route::delete('/remove', [JobController::class, 'remove']);
