@@ -89,7 +89,7 @@
                                     </td>
                                     <td>{{ moment(ap.apply_at).format('DD MMMM YYYY') }}</td>
                                     <td>
-                                        <button class="btn btn-primary btn-sm text-white"><i class="bi bi-eye-fill"></i></button>&nbsp;
+                                        <button class="btn btn-primary btn-sm text-white" @click="showApplication(ap.id)"><i class="bi bi-eye-fill"></i></button>&nbsp;
                                         <button class="btn btn-success btn-sm text-white"><i class="bi bi-pencil-fill"></i></button>&nbsp;
                                         <button class="btn btn-danger btn-sm text-white" @click="deleteApplication(ap.id)"><i class="bi bi-trash-fill"></i></button>
                                     </td>
@@ -148,6 +148,10 @@ export default {
                 }).catch(err => {
                     console.log("ada error nih!", err);
                 });
+        },
+        showApplication(id) {
+            localStorage.setItem('applicationId', id);
+            this.$router.push('/applied/detail'); 
         },
         deleteApplication(id) {
             Swal.fire({

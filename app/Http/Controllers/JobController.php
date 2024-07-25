@@ -23,6 +23,12 @@ class JobController extends Controller
         return response()->json($data);
     }
 
+    public function getDataFirst(Request $req){
+        $data = DB::table('applications')->where('id', $req->id)->first();
+
+        return response()->json($data);
+    }
+
     public function getDataCountApplied(){
         $data = [
             'linkedin' => DB::table('applications')->where('platform', 'Linkedin')->count(),
@@ -85,7 +91,7 @@ class JobController extends Controller
 
     public function remove(Request $req){
         DB::table('applications')->where('id', $req->id)->delete();
-        
+
         return response()->json(['message' => 'Berhasil menghapus data!']);
     }
 }

@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/getData', [JobController::class, 'getData']);
+Route::get('/getDataFirst', [JobController::class, 'getDataFirst']);
 Route::get('/getDataCountApplied', [JobController::class, 'getDataCountApplied']);
 Route::get('/getDataApplied', [JobController::class, 'getDataApplied']);
 Route::post('/store', [JobController::class, 'store']);
