@@ -79,17 +79,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(ap, index) in applications.filter(ap => 
-        (ap.company && ap.company.toLowerCase().includes(search.toLowerCase())) ||
-        (ap.role && ap.role.toLowerCase().includes(search.toLowerCase())) ||
-        (ap.platform && ap.platform.toLowerCase().includes(search.toLowerCase())) ||
-        (ap.status && ap.status.toLowerCase().includes(search.toLowerCase())))" :key="index">
-                                    <td>{{ index+1 }}</td>
+                                <tr v-for="(ap, index) in paginatedFilteredApplications" :key="index">
+                                    <td>{{ (currentPage - 1) * perPage + index + 1 }}</td>
                                     <td>{{ ap.company }}</td>
                                     <td>{{ ap.role }}</td>
                                     <td>{{ ap.platform }}</td>
                                     <td>
-                                        <span >{{ ap.status }}</span>
+                                        <span>{{ ap.status }}</span>
                                     </td>
                                     <td>{{ moment(ap.apply_at).format('DD MMMM YYYY') }}</td>
                                     <td>
@@ -100,11 +96,15 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <div class="mt-4 flex justify-center">
+                            <button class="btn btn-secondary" :disabled="currentPage === 1" @click="changePage(currentPage - 1)">Previous</button>
+                            <span class="mx-4">Page {{ currentPage }} of {{ totalPages }}</span>
+                            <button class="btn btn-secondary" :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">Next</button>
+                        </div>
                     </div>
                 </div> 
             </div> 
         </div> 
-        <!-- <div class="mt-5 ml-5 mb-5">{{ $applications->links() }}</div><br> -->
     </div>
 </template>
 
@@ -124,7 +124,10 @@ export default {
             pintarnya: 0, 
             ekrut: 0,
             applications: [],
-            search: ''
+            search: '',
+            currentPage: 1, 
+            perPage: 10, 
+            totalPages: 0   
         };
     },
     created(){
@@ -153,6 +156,9 @@ export default {
                 }).catch(err => {
                     console.log("ada error nih!", err);
                 });
+        },
+        changePage(page) {
+            this.currentPage = page;
         },
         showApplication(id) {
             localStorage.setItem('applicationId', id);
@@ -198,6 +204,21 @@ export default {
     computed: {
         moment() {
             return moment; 
+        },
+        filteredApplications() {
+            return this.applications.filter(ap => 
+                (ap.company && ap.company.toLowerCase().includes(this.search.toLowerCase())) ||
+                (ap.role && ap.role.toLowerCase().includes(this.search.toLowerCase())) ||
+                (ap.platform && ap.platform.toLowerCase().includes(this.search.toLowerCase())) ||
+                (ap.status && ap.status.toLowerCase().includes(this.search.toLowerCase()))
+            );
+        },
+        paginatedFilteredApplications() {
+            let filtered = this.filteredApplications;
+            this.totalPages = Math.ceil(filtered.length / this.perPage);
+            let start = (this.currentPage - 1) * this.perPage;
+            let end = start + this.perPage;
+            return filtered.slice(start, end);
         }
     }
 }
